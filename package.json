@@ -1,6 +1,6 @@
 {
   "name": "web-calendar-js",
-  "version": "1.0.0",
+  "version": "0.1.1",
   "description": "A calendar plug-in",
   "main": "index.js",
   "keywords":"calendar,calendar-js,web-calendar-js,calendarJs,webCalendarJs",
@@ -18,7 +18,7 @@
   "bugs": {
     "url": "https://github.com/webxiaoma/web-calendar-js/issues"
   },
-  "homepage": "https://www.npmjs.com/package/web-calendar-js",
+  "homepage": "https://github.com/webxiaoma/web-calendar-js",
   "devDependencies": {
     "autoprefixer": "  ^9.3.1",
     "babel-core": "^6.26.3",

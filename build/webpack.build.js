@@ -16,7 +16,7 @@ module.exports = wepackMerge(webpackBaseConfig,{
             watch:true
         }),
         new MiniCssExtractPlugin({
-            filename: `${buildConfig.assetsSubDir}/css/calendar.css`,
+            filename: `${buildConfig.assetsSubDir}/css/calendar.min.css`,
             chunkFilename: '[id].css'
         }),
 

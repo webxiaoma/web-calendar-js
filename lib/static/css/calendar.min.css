@@ -1,4 +1,5 @@
 .calendar-content-panel {
+  display: none;
   width: 360px;
   padding: 5px 0;
   color: #313131;

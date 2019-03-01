@@ -5,6 +5,7 @@ import './assets/css/index.less'
 import $ from './utils/jq-utils.js'
 import Day from './day.js'
 import opt from './options.js'
+import {calendar} from  './utils/calendar.js'
 
 function Calendar(el,options){
    this.options = Object.assign(opt,options);
@@ -138,7 +139,7 @@ Calendar.prototype.setPosition = function(){
     if(calendarPsotionLeft > winWidth){
         left = winWidth  - calendarW - 10 + "px";
     }
-console.log(calendarPsotionTop,winHeight)
+
     if(calendarPsotionTop > winHeight){
         top = domObj.offsetTop - calendarH - height + "px"
     }
@@ -155,13 +156,6 @@ console.log(calendarPsotionTop,winHeight)
  * 初始化每月天数（包含头部上月的天数，以及尾部下月的天数）
  **/ 
 Calendar.prototype.createDayList = function(){
-    // 获取今日时间
-    var dataTime = new Date()
-    var nowTime = {
-        year:dataTime.getFullYear(),
-        month:dataTime.getMonth()+1,
-        day:dataTime.getDate(),
-    }
 
     // 判断当前年份是否是闰年
     if(this.current.year%4==0){
@@ -174,24 +168,26 @@ Calendar.prototype.createDayList = function(){
     
     // 创建当月展示天
     for(var i=0;i<this.yearMouth[currentMonth-1];i++){// 循环当前月份的天数 0代表一月
-        var _thisDay={
-          year: this.current.year,
-          month:currentMonth,
-          day:(i+1), 
-          flag:'current',
-          nowTime:nowTime, // 今日时间
-        };
-        this.options.beforeCreateDay(_thisDay)
+        // var _thisDay={
+        //   year: this.current.year,
+        //   month:currentMonth,
+        //   day:(i+1), 
+        //   flag:'current',
+        //   nowTime:nowTime, // 今日时间
+        // };
+        //  // 阴历转换
+        var _thisDay = calendar.solar2lunar(this.current.year,currentMonth,(i+1));
+        _thisDay.flag = 'current';
+
         var createdDay = new Day(_thisDay,this) // 创建每天对象
-        this.options.afterCreateDay(createdDay)
         this.days.push(createdDay) // 将对象存储到this.days 数组中
     }
 
     // 创建上月展示天
     var currentMonth = this.current.month; // 当前月份(1-12)
     var currentYear = this.current.year
-    if(this.days[0].current.nWeek !== 1){ // 判断每月第一天是否不是星期一(1-7)
-        var week = this.days[0].current.nWeek - 1;
+    if(this.days[0].dayMsg.nWeek !== 1){ // 判断每月第一天是否不是星期一(1-7)
+        var week = this.days[0].dayMsg.nWeek - 1;
 
         // 当前月份（1-12）当currentMonth为一月时，上一月份为上一年12月份
         if(currentMonth-2 === -1){ 
@@ -202,16 +198,19 @@ Calendar.prototype.createDayList = function(){
         }
 
         for(var i = 0; i<week; i++){
-            var _thisDay={
-                year:currentYear,
-                month:currentMonth,
-                day:this.yearMouth[currentMonth-1]-i,
-                flag:'prev',
-                nowTime:nowTime, // 今日时间
-            };
-            this.options.beforeCreateDay(_thisDay)
+            // var _thisDay={
+            //     year:currentYear,
+            //     month:currentMonth,
+            //     day:this.yearMouth[currentMonth-1]-i,
+            //     flag:'prev',
+            //     nowTime:nowTime, // 今日时间
+            // };
+             // 阴历转换
+            var currentDay = this.yearMouth[currentMonth-1]-i
+            var _thisDay = calendar.solar2lunar(currentYear,currentMonth,currentDay);
+            _thisDay.flag = 'prev';
+
             var createdDay = new Day(_thisDay,this) // 创建每天对象
-            this.options.afterCreateDay(createdDay)
             this.days.unshift(createdDay) // 将对象存储到this.days 数组中
         }
     }
@@ -232,16 +231,19 @@ Calendar.prototype.createDayList = function(){
     // 保证整好有六行，如果不到五行，后面补
     while(this.days.length/7 !== 6){
           nextDay++;
-          var _thisDay = {
-               year:currentYear,
-               month:currentMonth,
-               day:nextDay,
-               flag:'next',
-               nowTime:nowTime, // 今日时间
-          };
-          this.options.beforeCreateDay(_thisDay) // 每日创建前的钩子函数
+        //   var _thisDay = {
+        //        year:currentYear,
+        //        month:currentMonth,
+        //        day:nextDay,
+        //        flag:'next',
+        //        nowTime:nowTime, // 今日时间
+        //   };
+
+          // 阴历转换
+          var _thisDay = calendar.solar2lunar(currentYear,currentMonth,nextDay);
+          _thisDay.flag = 'next';
+        
           var createdDay = new Day(_thisDay,this) // 创建每天对象
-          this.options.afterCreateDay(createdDay)// 每日创建后的钩子函数
           this.days.push(createdDay) // 将对象存储到this.days 数组中
     }
 
@@ -250,7 +252,6 @@ Calendar.prototype.createDayList = function(){
 // 刷新天数
 Calendar.prototype.updataDays = function(){
     this.createDayList() // 初始化所有天数数据
-
     var calendarHeader = `<div class="calendar-heard-day">
                              <a href="javascript:;" class="prev-year-btn header-day-btn ${this.options.nextMonthBtnText?this.options.nextMonthBtnText:'prev-year-style'}">${this.options.nextMonthBtnText}</a> 
                              <a href="javascript:;" class="prev-month-btn header-day-btn ${this.options.prevMonthBtnText?this.options.prevMonthBtnText:'prev-month-style'}">${this.options.prevMonthBtnText}</a> 
@@ -347,7 +348,7 @@ Calendar.prototype.updataYears = function(year){
 }
 
 /**
- * 事件处理
+ * @msg  事件处理
  */
 
 // 添加事件
@@ -552,24 +553,23 @@ Calendar.prototype.headerYearClick = function(pn){
 
 
 /**
- * 日期事件触发
+ * @msg 日期事件触发
  * 
  **/ 
 
 // 日期点击时会触发
 Calendar.prototype.dayClick = function(e){
-    // this.days
-    if(e.dateMsg.flag == 'current'){
+    if(e.dayMsg.flag == 'current'){
         this.days.forEach(dayItem =>{
             if(e !== dayItem){
                 dayItem.removeClass("active")
             }
         })
-    
     }
     
     this.setInputVal() // 设置input值
     this.options.click(e.current)
+    // this.close()
 
 }
 //点击日历中的上月天数或下月天数会触发
@@ -578,7 +578,6 @@ Calendar.prototype.dayPrevOrNextClickUpdata = function(year,month,day){
     this.createDayList()
     this.updataDays()
 }
-
 
 
 /**
@@ -724,5 +723,4 @@ Calendar.prototype.addEventInput = function(){
     
 }
 
-
-export default Calendar
+module.exports = Calendar

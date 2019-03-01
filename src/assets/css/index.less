@@ -1,6 +1,7 @@
 @import './theme.less';
 
 .calendar-content-panel{
+    // display: none;
     width:360px;
     padding:5px 0;
     color: @defaultColor;
@@ -215,10 +216,12 @@
                         text-align: center;
                         padding:4px 0;
                         .calendar-day-wrap{
+                            // display:flex;
+                            // flex-direction: column;
+                            // align-content: center;
                             padding:4px 0;
                             width: 45px;
                             height: 45px;
-                            border-radius: 50%;
                             color: #fff;
                             cursor: pointer;
                             .calendar-solar-day{
@@ -235,19 +238,14 @@
                         .current-month{
                             color:rgb(0, 0, 0);
                             &:hover{
-                                width: 45px;
-                                height: 45px;
-                                border-radius: 50%;
-                                color: #fff;
-                                background-color: @hoverColor;
+                                color: @hoverColor;
                             }
                         }
                         .active{
-                            color: #fff;
-                            background-color: @selectColor;
+                            color: @selectColor;
                             width: 45px;
                             height: 45px;
-                            border-radius: 50%;
+                            font-weight: 700;
                         }
                         .current{
                             position: relative;
@@ -266,7 +264,19 @@
                             cursor:not-allowed;
                             color:@unClickColor;
                         }
-                       
+                        .rest{
+                            position: relative;
+                            &:before{
+                                content:"休";
+                                position: absolute;
+                                top:0;
+                                right:0;
+                                width:10px;
+                                height:10px;
+                                font-size:12px;
+                                color:@restColor;
+                            }
+                        }
 
                     }
                } 
