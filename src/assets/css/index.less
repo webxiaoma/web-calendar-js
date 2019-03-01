@@ -1,0 +1,305 @@
+@import './theme.less';
+
+.calendar-content-panel{
+    width:360px;
+    padding:5px 0;
+    color: @defaultColor;
+    border: 1px solid #e4e7ed;
+    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+    background: #fff;
+    border-radius: 4px;
+    margin: 5px 0;
+    position: absolute;
+    z-index: 11111111;
+    user-select:none;
+    &::before{
+        top: 1px;
+        margin-left: -6px;
+        border-top-width: 0;
+        border-bottom-color: #fff;
+    }
+    div,p,a,span,i,ul,li,table,tr,td,thead,th,img{
+        box-sizing: border-box;
+        border:0;
+        padding:0;
+        margin:0;
+        text-decoration: none;
+    }
+    a{
+      color: @defaultColor;
+    }
+    .calendar-panel-heard{
+        margin: 12px;
+        text-align: center;
+        // padding: 0 8px;
+        // 每月天数头部样式
+        .calendar-heard-day{
+           a{
+                font-size: 16px;
+                font-weight: 500;
+                padding: 0 5px;
+                line-height: 22px;
+                text-align: center;
+                cursor: pointer;
+                color: @defaultColor;
+                &:hover{
+                    color:  @hoverColor;
+                }
+           }
+           span{
+                cursor: pointer;
+                color: @defaultColor;
+                &:hover{
+                    color:  @hoverColor;
+                }
+           }
+           .prev-year-btn{
+                float:left;
+           }
+           .prev-month-btn{
+                float:left;
+            }
+            .next-year-btn{
+                float:right;
+            }
+            .next-month-btn{
+                float:right;
+            }
+        }
+        // 年数头部样式
+        .calendar-panel-heard-year{
+            display: none;
+            margin-bottom: 0;
+            padding-bottom: 12px;
+            border-bottom: solid 1px #ebeef5;
+            .calendar-heard-year{
+                a{
+                    font-size: 16px;
+                    font-weight: 500;
+                    padding: 0 5px;
+                    line-height: 22px;
+                    text-align: center;
+                    cursor: pointer;
+                    color: @defaultColor;
+               }
+               span{
+                    color: @defaultColor;
+               }
+               .prev-year-btn{
+                   float:left;
+                }
+                .next-year-btn{
+                    float:right;
+                }
+                
+            }
+        }
+        // 月数头部样式
+        .calendar-panel-heard-month{
+            .calendar-panel-heard-year;
+            .calendar-heard-month{
+               .month-return-year{
+                    color: @defaultColor;
+                    cursor: pointer;
+               }
+            }
+        }
+        // 上一年样式
+        .prev-year-style{
+            position: relative;
+            &:after{
+                content:"";
+                display: block;
+                border-left: 1px solid; border-bottom: 1px solid;
+                width: 7px; 
+                height: 7px;
+                transform: rotate(45deg);
+                position: absolute;
+                top:7px;
+                left:0;
+            }
+            &::before{
+                content:"";
+                display: block;
+                border-left: 1px solid; border-bottom: 1px solid;
+                width: 7px; 
+                height: 7px;
+                transform: rotate(45deg);
+                position: absolute;
+                top:7px;
+                left:5px;
+            }
+        }
+         // 下一年样式
+        .next-year-style{
+            position: relative;
+            &:after{
+                content:"";
+                display: block;
+                border-left: 1px solid; border-bottom: 1px solid;
+                width: 7px; 
+                height: 7px;
+                transform: rotate(-135deg);
+                position: absolute;
+                top:7px;
+                right:0px;
+            }
+            &:before{
+                content:"";
+                display: block;
+                border-left: 1px solid; border-bottom: 1px solid;
+                width: 7px; 
+                height: 7px;
+                transform: rotate(-135deg);
+                position: absolute;
+                top:7px;
+                right:5px;
+            }
+        }
+         // 上一月样式
+        .prev-month-style{
+            position: relative;
+            &:after{
+                content:"";
+                display: block;
+                border-left: 1px solid; border-bottom: 1px solid;
+                width: 7px; 
+                height: 7px;
+                transform: rotate(45deg);
+                position: absolute;
+                top:7px;
+                left:30px;
+            }
+        }
+         // 下一月样式
+        .next-month-style{
+            position: relative;
+            &:after{
+                content:"";
+                display: block;
+                border-left: 1px solid; border-bottom: 1px solid;
+                width: 7px; 
+                height: 7px;
+                transform: rotate(-135deg);
+                position: absolute;
+                top:7px;
+                right:30px;
+            }
+        }
+    }
+    .calendar-panel-body{
+        padding:0 10px;
+        // 每月天数样式
+        .calendar-table-day{
+            table-layout:fixed;
+            width:100%;
+            font-size:12px;
+            user-select:none;
+            .calendar-tbody{
+                .calendar-week{
+                    margin-bottom:5px;
+                    th{
+                        padding: 10px 6px;
+                        font-weight: 500;
+                        border-bottom: solid 1px #ebeef5;
+                        display: table-cell;
+                        vertical-align: inherit;
+                        color: @defaultColor;
+                    }
+                }
+               .calendar-tr-row{
+                    display: table-row;
+                    vertical-align: inherit;
+                    border-color: inherit;
+                    td{
+                        text-align: center;
+                        padding:4px 0;
+                        .calendar-day-wrap{
+                            padding:4px 0;
+                            width: 45px;
+                            height: 45px;
+                            border-radius: 50%;
+                            color: #fff;
+                            cursor: pointer;
+                            .calendar-solar-day{
+                                font-size:14px;
+                            }
+                            .calendar-lunar-day{
+                                font-size:12px;
+                            }
+                           
+                        }
+                        .prev-month,.next-month{
+                            color: @unClickColor;
+                        }
+                        .current-month{
+                            color:rgb(0, 0, 0);
+                            &:hover{
+                                width: 45px;
+                                height: 45px;
+                                border-radius: 50%;
+                                color: #fff;
+                                background-color: @hoverColor;
+                            }
+                        }
+                        .active{
+                            color: #fff;
+                            background-color: @selectColor;
+                            width: 45px;
+                            height: 45px;
+                            border-radius: 50%;
+                        }
+                        .current{
+                            position: relative;
+                            &::after{
+                                content:"";
+                                width:5px;
+                                height:5px;
+                                background: @currentColor;
+                                border-radius: 50%;
+                                position: absolute;
+                                bottom:0;
+                                left:45%;
+                            }
+                        }
+                        .unClick{
+                            cursor:not-allowed;
+                            color:@unClickColor;
+                        }
+                       
+
+                    }
+               } 
+            }
+        }
+
+        // 每年样式
+        .calendar-panel-body-year{
+            display: none;
+            .year-module{
+                display:inline-block;
+                width:25%;
+                padding:26px 0;
+                text-align: center;
+                a{
+                    display:block;
+                    font-size:14px;
+                }
+            }
+        }
+         // 每月样式
+         .calendar-panel-body-month{
+            display: none;
+            .month-module{
+                display:inline-block;
+                width:25%;
+                padding:26px 0;
+                text-align: center;
+                a{
+                    display:block;
+                    font-size:14px;
+                }
+            }
+        }
+    }
+}
