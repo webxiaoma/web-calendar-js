@@ -54,7 +54,7 @@ export default {
        // day 实例
     },
 
-    createDomDay:function(){
+    // createDomDay:function(){
 
-    }
+    // }
 }
