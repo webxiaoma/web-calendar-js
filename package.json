@@ -1,6 +1,6 @@
 {
   "name": "web-calendar-js",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A calendar plug-in",
   "main": "index.js",
   "keywords":"calendar,calendar-js,web-calendar-js,calendarJs,webCalendarJs",
