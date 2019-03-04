@@ -1,5 +1,4 @@
 .calendar-content-panel {
-  display: none;
   width: 360px;
   padding: 5px 0;
   color: #313131;
@@ -265,8 +264,6 @@
   padding: 4px 0;
   width: 45px;
   height: 45px;
-  -webkit-border-radius: 50%;
-          border-radius: 50%;
   color: #fff;
   cursor: pointer;
 }
@@ -284,20 +281,13 @@
   color: #000000;
 }
 .calendar-content-panel .calendar-panel-body .calendar-table-day .calendar-tbody .calendar-tr-row td .current-month:hover {
-  width: 45px;
-  height: 45px;
-  -webkit-border-radius: 50%;
-          border-radius: 50%;
-  color: #fff;
-  background-color: #7abbfc;
+  color: #7abbfc;
 }
 .calendar-content-panel .calendar-panel-body .calendar-table-day .calendar-tbody .calendar-tr-row td .active {
-  color: #fff;
-  background-color: #409EFF;
+  color: #409EFF;
   width: 45px;
   height: 45px;
-  -webkit-border-radius: 50%;
-          border-radius: 50%;
+  font-weight: 700;
 }
 .calendar-content-panel .calendar-panel-body .calendar-table-day .calendar-tbody .calendar-tr-row td .current {
   position: relative;
@@ -316,6 +306,19 @@
 .calendar-content-panel .calendar-panel-body .calendar-table-day .calendar-tbody .calendar-tr-row td .unClick {
   cursor: not-allowed;
   color: #7c7c7c;
+}
+.calendar-content-panel .calendar-panel-body .calendar-table-day .calendar-tbody .calendar-tr-row td .rest {
+  position: relative;
+}
+.calendar-content-panel .calendar-panel-body .calendar-table-day .calendar-tbody .calendar-tr-row td .rest:before {
+  content: "\4F11";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 10px;
+  height: 10px;
+  font-size: 12px;
+  color: #c28e00;
 }
 .calendar-content-panel .calendar-panel-body .calendar-panel-body-year {
   display: none;
