@@ -74,8 +74,6 @@ Day.prototype.creatData = function(){
      var caledar = this.caledar;
      var dayMsg = this.dayMsg;
     
-
-    
     if(this.caledar.options.isLunar){
         if(this.caledar.options.isFestival){ // 是否显示节日
             if(dayMsg.LFtv){ // 阴历节日
