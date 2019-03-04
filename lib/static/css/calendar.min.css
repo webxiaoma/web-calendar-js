@@ -1,4 +1,5 @@
 .calendar-content-panel {
+  display: none;
   width: 360px;
   padding: 5px 0;
   color: #313131;
@@ -49,6 +50,9 @@
   margin: 12px;
   text-align: center;
 }
+.calendar-content-panel .calendar-panel-heard .calendar-heard-day {
+  position: relative;
+}
 .calendar-content-panel .calendar-panel-heard .calendar-heard-day a {
   font-size: 16px;
   font-weight: 500;
@@ -75,16 +79,21 @@
   float: left;
 }
 .calendar-content-panel .calendar-panel-heard .calendar-heard-day .next-year-btn {
-  float: right;
+  position: absolute;
+  right: 0;
 }
 .calendar-content-panel .calendar-panel-heard .calendar-heard-day .next-month-btn {
-  float: right;
+  position: absolute;
+  right: 4px;
 }
 .calendar-content-panel .calendar-panel-heard .calendar-panel-heard-year {
   display: none;
   margin-bottom: 0;
   padding-bottom: 12px;
   border-bottom: solid 1px #ebeef5;
+}
+.calendar-content-panel .calendar-panel-heard .calendar-panel-heard-year .calendar-heard-year {
+  position: relative;
 }
 .calendar-content-panel .calendar-panel-heard .calendar-panel-heard-year .calendar-heard-year a {
   font-size: 16px;
@@ -102,13 +111,17 @@
   float: left;
 }
 .calendar-content-panel .calendar-panel-heard .calendar-panel-heard-year .calendar-heard-year .next-year-btn {
-  float: right;
+  position: absolute;
+  right: 0;
 }
 .calendar-content-panel .calendar-panel-heard .calendar-panel-heard-month {
   display: none;
   margin-bottom: 0;
   padding-bottom: 12px;
   border-bottom: solid 1px #ebeef5;
+}
+.calendar-content-panel .calendar-panel-heard .calendar-panel-heard-month .calendar-heard-year {
+  position: relative;
 }
 .calendar-content-panel .calendar-panel-heard .calendar-panel-heard-month .calendar-heard-year a {
   font-size: 16px;
@@ -126,7 +139,8 @@
   float: left;
 }
 .calendar-content-panel .calendar-panel-heard .calendar-panel-heard-month .calendar-heard-year .next-year-btn {
-  float: right;
+  position: absolute;
+  right: 0;
 }
 .calendar-content-panel .calendar-panel-heard .calendar-panel-heard-month .calendar-heard-month .month-return-year {
   color: #313131;
