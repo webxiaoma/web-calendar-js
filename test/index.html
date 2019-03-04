@@ -10,22 +10,33 @@
     <style>
        #root{
           position: relative;
-          left:200px;
-          top:500px;
+          left:10px;
+          top:10px;
+       }
+       .data_msg p{
+          padding-left:30px;
        }
     </style>
 </head>
 <body>
      <div>
-
         <input type="text"  id="root"/>
      </div>
-
-     <div id="msg">
-     
-     
+     <div style="position: relative;top:0px;left: 450px;">
+        <div class="data_msg">
+            选择的日期信息
+           <p><span>当年的生肖属性：</span><span id="msg1"></span></p>
+           <p><span>当日星座：</span><span id="msg2"></span></p>
+           <p><span>是否是闰年：</span><span id="msg3"></span></p>
+           <p><span>二十四节气：</span><span id="msg4"></span></p>
+           <p><span>字符串星期：</span><span id="msg5"></span></p>
+           <p><span>阳历节日：</span><span id="msg6"></span></p>
+           <p><span>阴历节日：</span><span id="msg7"></span></p>
+       </div>
+        <p><span>日期改变了：</span><span id="change"></span></p>
+        <p><span>右击天数状态：</span><span id="rightClick"></span></p>
      </div>
- 
+
      <script src="../lib/js/calendar.min.js"></script>
      <script>
           var  timeLayout = new Calendar("#root",{
@@ -36,25 +47,33 @@
                     nextYearBtnText:'',
                     prevMonthBtnText:'',
                     nextMonthBtnText:'',
-                    max:'2019-3-28',
-                    min:'2019-12-28',
+                    max:'2019-4-28', 
+                    min:'2019-2-28',
+                    isHoliday:true, // 是否显示休息
+                    isFestival:true, // 是否显示节日
+                    isLunar:true, // 是否显示阴历
+                    isSolarTerm:true, // 是否显示节气
                     change:function(val){ // 改变时触发
-                        console.log(val)
+                        document.getElementById("change").innerHTML = val.dataStr
                     },
-                    click:function(data){ // 点击回调函数
-                        console.log(data)
+                    click:function(day){ // 点击回调函数
+                        document.getElementById("msg1").innerHTML = day.dayMsg.Animal;
+                        document.getElementById("msg2").innerHTML = day.dayMsg.astro;
+                        document.getElementById("msg3").innerHTML = day.dayMsg.isLeap?"是":"否";
+                        document.getElementById("msg4").innerHTML = day.dayMsg.Term?day.dayMsg.Term:"暂无";
+                        document.getElementById("msg5").innerHTML = day.dayMsg.ncWeek;
+                        document.getElementById("msg6").innerHTML = day.dayMsg.SFtv?day.dayMsg.SFtv:"暂无";;
+                        document.getElementById("msg7").innerHTML = day.dayMsg.LFtv?day.dayMsg.LFtv:"暂无";;
                     },
                     rightHandClick:function(day,e){ // 右键回调函数
-                        console.log(day)
+                        document.getElementById("rightClick").innerHTML = "右击了日期"
                     },
                     beforeCreateDay:function(dayMsg){  // 天数创建之前
-                        console.log()
+                        // console.log("创建天数之前")
                     },
                     afterCreateDay:function(day){  // 天数创建之后
-                    //  console.log(day)
+                        // console.log("创建天数之后")
                     },
                })
-
-               console.log(timeLayout)
      </script>
 </html>

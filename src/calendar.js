@@ -566,10 +566,10 @@ Calendar.prototype.dayClick = function(e){
             }
         })
     }
-    
+
+    this.options.click(e)
     this.setInputVal() // 设置input值
-    this.options.click(e.current)
-    // this.close()
+    this.close()
 
 }
 //点击日历中的上月天数或下月天数会触发
@@ -668,26 +668,43 @@ Calendar.prototype.getInputVal = function(){
     var year = time.getFullYear()
     var month = time.getMonth() + 1;
     var day = time.getDate();
+    
+    var _that = this;
+    var setDate = function(){
+           _that.selected = {
+                year,   
+                month,  // 1 - 12
+                day, 
+            }
+            _that.current = {
+                year,   
+                month,  // 1 - 12
+                day, 
+            }
+            _that.setInputVal()
+    }
+
     if(year <= this.maxYear&&year >= this.minYear){
         // 限制年
         if(year<=this.limitTime.year[1]&&year>=this.limitTime.year[0]){ 
              // 限制月
             if(month<=this.limitTime.month[1]&&month>=this.limitTime.month[0]){
                  // 限制日
-                if(day<=this.limitTime.day[1]&&day>=this.limitTime.day[0]){
-                    this.selected = {
-                        year,   
-                        month,  // 1 - 12
-                        day, 
-                     }
-                     this.current = {
-                        year,   
-                        month,  // 1 - 12
-                        day, 
-                     }
-                     this.setInputVal()
+                if(month == this.limitTime.month[0]){
+                    if(day >= this.limitTime.day[0] ){
+                         setDate()
+                         return
+                    }
+                }else if(month == this.limitTime.month[1]){
+                    if(day <= this.limitTime.day[1]){
+                        setDate()
+                         return
+                    }
+                }else{
+                     setDate()
                      return
                 }
+
             }
          }
          this.setInputVal(true)
