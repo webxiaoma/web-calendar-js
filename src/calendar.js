@@ -46,12 +46,11 @@ Calendar.prototype.init = function(){
 }
 // 初始化限制时间
 Calendar.prototype.setLimitTime = function(){
-    var max = this.options.max
-    var min = this.options.min
+    var max = this.options.max.replace(/-/g,"/") // 兼容ie与Firefox
+    var min = this.options.min.replace(/-/g,"/") // 兼容ie与Firefox
     
     var maxDate = new Date(max)
     var minDate = new Date(min)
-
     var maxYear = maxDate.getFullYear()
     var maxMonth = maxDate.getMonth() + 1
     var maxDay = maxDate.getDate()
@@ -168,14 +167,7 @@ Calendar.prototype.createDayList = function(){
     
     // 创建当月展示天
     for(var i=0;i<this.yearMouth[currentMonth-1];i++){// 循环当前月份的天数 0代表一月
-        // var _thisDay={
-        //   year: this.current.year,
-        //   month:currentMonth,
-        //   day:(i+1), 
-        //   flag:'current',
-        //   nowTime:nowTime, // 今日时间
-        // };
-        //  // 阴历转换
+          // 阴历转换
         var _thisDay = calendar.solar2lunar(this.current.year,currentMonth,(i+1));
         _thisDay.flag = 'current';
 
@@ -198,13 +190,7 @@ Calendar.prototype.createDayList = function(){
         }
 
         for(var i = 0; i<week; i++){
-            // var _thisDay={
-            //     year:currentYear,
-            //     month:currentMonth,
-            //     day:this.yearMouth[currentMonth-1]-i,
-            //     flag:'prev',
-            //     nowTime:nowTime, // 今日时间
-            // };
+          
              // 阴历转换
             var currentDay = this.yearMouth[currentMonth-1]-i
             var _thisDay = calendar.solar2lunar(currentYear,currentMonth,currentDay);
@@ -231,14 +217,7 @@ Calendar.prototype.createDayList = function(){
     // 保证整好有六行，如果不到五行，后面补
     while(this.days.length/7 !== 6){
           nextDay++;
-        //   var _thisDay = {
-        //        year:currentYear,
-        //        month:currentMonth,
-        //        day:nextDay,
-        //        flag:'next',
-        //        nowTime:nowTime, // 今日时间
-        //   };
-
+       
           // 阴历转换
           var _thisDay = calendar.solar2lunar(currentYear,currentMonth,nextDay);
           _thisDay.flag = 'next';
@@ -360,6 +339,8 @@ Calendar.prototype.addEvent = function(){
          */
       // 展示每月天数时，头部添加事件
       $timePanl.find(".calendar-panel-heard .calendar-panel-heard-day")[0].addEventListener("click",(e)=>{
+            window.event? window.event.cancelBubble = true : e.stopPropagation();
+
             var classNameAry = e.target.className.split(" ")
             if(classNameAry.indexOf('prev-year-btn')>-1){ // 点击的上一年
                 this.prevOrNextYears("prev")
@@ -407,7 +388,7 @@ Calendar.prototype.addEvent = function(){
 
     // 展示年数时，头部添加事件
     $timePanl.find(".calendar-panel-heard .calendar-panel-heard-year")[0].addEventListener("click",(e)=>{
-
+        window.event? window.event.cancelBubble = true : e.stopPropagation();
         var classNameAry = e.target.className.split(" ")
         if(classNameAry.indexOf('prev-year-btn')>-1){ // 点击的上一年
              this.headerYearClick("prev")
@@ -420,6 +401,7 @@ Calendar.prototype.addEvent = function(){
     })
     // 选择年份事件
     $timePanl.find(".calendar-panel-body .calendar-panel-body-year")[0].addEventListener("click",(e)=>{
+        window.event? window.event.cancelBubble = true : e.stopPropagation();
          var dataYear = $(e.target).attr("data-year")
          if(dataYear){
             this.current.year = Number(dataYear);
@@ -437,6 +419,7 @@ Calendar.prototype.addEvent = function(){
      */
     // 选择月份事件
     $timePanl.find(".calendar-panel-body .calendar-panel-body-month")[0].addEventListener("click",(e)=>{
+        window.event? window.event.cancelBubble = true : e.stopPropagation();
         var dataMonth = $(e.target).attr("data-month")
         if(dataMonth){
             this.current.month = Number(dataMonth);
@@ -452,6 +435,7 @@ Calendar.prototype.addEvent = function(){
     
     // 返回年份选择
     $timePanl.find(".calendar-panel-heard .calendar-panel-heard-month")[0].addEventListener("click",(e)=>{
+        window.event? window.event.cancelBubble = true : e.stopPropagation();
         var classNameAry = e.target.className.split(" ")
         if(classNameAry.indexOf('month-return-year')>-1){ // 点击年份
            // 月份隐藏
@@ -466,11 +450,20 @@ Calendar.prototype.addEvent = function(){
     // 给document 添加事件
     document.addEventListener("click",()=>{
        this.close()
+
     });
 
     // 阻止事件冒泡
     $timePanl.click((e)=>{
-        e.stopPropagation()
+        window.event? window.event.cancelBubble = true : e.stopPropagation();
+
+        // 将表单里时间初始化
+        var $inp = this.$el;
+        var val = $inp.val();
+        if(!val){
+            this.initTime()
+        }
+        this.updataDays()
     })
 }
 
@@ -566,7 +559,6 @@ Calendar.prototype.dayClick = function(e){
             }
         })
     }
-
     this.options.click(e)
     this.setInputVal() // 设置input值
     this.close()
@@ -585,30 +577,31 @@ Calendar.prototype.dayPrevOrNextClickUpdata = function(year,month,day){
  * 
  **/ 
 Calendar.prototype.open = function(){
-    this.$timePanl.show()
-    this.setPosition()
+
+        this.$timePanl.show()
+        this.setPosition()
 }
 
 Calendar.prototype.close = function(){
-    var timePanl = this.$timePanl
-    timePanl.find(".calendar-panel-heard .calendar-panel-heard-month").hide()
-            .siblings(".calendar-panel-heard-year").hide()
-            .siblings(".calendar-panel-heard-day").show()
 
-    timePanl.find(".calendar-panel-body .calendar-panel-body-month").hide()
+    var $timePanl = this.$timePanl
+    $timePanl.find(".calendar-panel-heard .calendar-panel-heard-month").hide()
+             .siblings(".calendar-panel-heard-year").hide()
+             .siblings(".calendar-panel-heard-day").show();
+
+
+    $timePanl.find(".calendar-panel-body .calendar-panel-body-month").hide()
             .siblings(".calendar-panel-body-year").hide()
-            .siblings(".calendar-panel-body-day").show()   
-   
-    this.$timePanl.hide()
+            .siblings(".calendar-panel-body-day").show();   
+
+    $timePanl.hide();
+
 }
-
-
 
 /**
  * @msg 初始化input
  * 
  **/ 
-
 
 // 初始化input
 Calendar.prototype.initInput = function(){
@@ -657,6 +650,11 @@ Calendar.prototype.getInputVal = function(){
     if(/^\d$/.test(val)){
       val = Number(val)
     }
+
+    if(typeof val === 'string'){
+        val = val.replace(/-/g,"/") // 兼容ie与Firefox
+    } 
+
     var time = new Date(val);
     var milliscond = time.valueOf()
    
@@ -724,13 +722,16 @@ Calendar.prototype.addEventInput = function(){
 
       // 获取焦点事件
      input.focus(()=>{
-        var $inp = this.$el;
-        var val = $inp.val();
-        if(!val){
-            this.initTime()
+        var status = this.$timePanl[0].style.display
+        if(status !== 'block'){  // 日期面板显示时，就不在执行
+            var $inp = this.$el;
+            var val = $inp.val();
+            if(!val){
+                this.initTime()
+            }
+            this.updataDays()
+            this.open()
         }
-        this.updataDays()
-        this.open()
      })
 
      // 失去焦点事件
