@@ -4,6 +4,8 @@
 
 ---
 
+[中文文档](https://webxiaoma.com/web-plugin/calendar.html)
+
 ## 安装
 
 **1. 第一种方式，直接引入**
