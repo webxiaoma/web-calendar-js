@@ -103,7 +103,6 @@ Day.prototype.creatData = function(){
             this.selected = true;
         }
     }
-   
 
     // 如果是选中状态，就不显示'休'
     if(this.caledar.options.isHoliday){
@@ -121,7 +120,7 @@ Day.prototype.layout = function(){
 
     var dayWrapClassName  = ""
     if(this.disabled){  // 不可点击
-        dayWrapClassName = ` ${this.dayMsg.isToday?'current':''} unClick`
+        dayWrapClassName = `${this.dayMsg.isToday?'current':''} unClick`
     }else{
         dayWrapClassName = `${this.dayMsg.flag}-month ${this.dayMsg.isToday?'current':''} ${this.selected?'active':''}`
     }

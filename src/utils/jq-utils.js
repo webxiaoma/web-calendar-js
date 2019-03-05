@@ -5,7 +5,6 @@
 var D = document; // 存储document
 
 function Dom(selector,bol){ // selector 为选择元素， bol为是否根元素（true为是）
-    
     if(!selector){
         return this
     }
@@ -136,28 +135,6 @@ Dom.prototype = {
          })
          return this;
     },
-    // 替换元素节点
-    replaceNode(oldNode,newNode){
-        if(!this._isNode(oldNode)){
-            return new Error("请求输入节点")
-        }
-        // debugger
-        var $parentNode = $(oldNode).parent()[0]
-        
-        //newNode 是节点
-        if(this._isNode(newNode)){ 
-            $parentNode.replaceChild(oldNode,newNode)
-        }
-
-        // newNode 是字符串
-        if(typeof newNode === 'string'){
-            let div = D.createElement('div')
-            div.innerHTML = newNode;
-            $parentNode.replaceChild(div.firstElementChild,oldNode)
-        }
-
-        return this
-    },
     // 添加获取属性
     attr(name,val){
         if (!val) { // 获取值
@@ -202,68 +179,6 @@ Dom.prototype = {
         }
         return this;
     },
-    // 绑定监听事件
-    on(eventName,selector,callback){
-        let eventAry = eventName.trim().split(/\s+/ig)
-        return  this._forEachDom(dom => {
-
-            if(callback){ // 第三个参数是否存在
-                // 判断selector 是否是jqDom
-                if(selector.jqDom){
-                    selector = selector
-                
-                }
-                if(typeof selector == 'string'){
-                    selector = this.find(selector)
-                }
-                // 判断selector 是否是字符串
-                // 代理
-                eventAry.forEach(name=>{
-                    dom.addEventListener(name,function(e){
-                        var target = e.target
-                        selector._forEachDom(selectorDom =>{
-                            if(target === selectorDom){
-                                callback.call(target,e)
-                            }
-                        })
-                    })
-                })
-               
-            }else{
-                // 非代理
-                let  callbackFun = selector
-
-                eventAry.forEach(name=>{
-                    dom.addEventListener(name,function(e){
-                        callbackFun.call(this,e)
-                    })
-                })
-            }
-
-        })
-    },
-
-    // 取消监听事件
-    off(eventName,callback){
-        let eventAry = eventName.trim().split(/\s+/ig)
-        return this._forEachDom(dom => {
-            eventAry.forEach(name=>{
-               dom.removeEventListener(name,callback)
-            })
-        })
-    },
-
-    // hover 事件
-    hover(senter=()=>{},leave=()=>{}){
-       this.on("mouseenter",(e)=>{
-           senter.call(e.target,e)
-       })
-
-       this.on("mouseleave",(e)=>{
-           leave.call(e.target,e)
-       })
-    },
-
     // 修改css
     css(style,val){
         return this._forEachDom(dom => {
@@ -286,86 +201,14 @@ Dom.prototype = {
     hide(){
         this.css("display","none");
         return this;
-    },
 
-    // each循环遍历
-    each(callback){
-
-        for(let i=0;i<this.length;i++){
-            callback($(this[i]))
-        }
-
-        return this
-    },
-    // 获取子元素
-    children(ele){
-        if(ele){ 
-           return $(this[0].querySelectorAll(ele))
-        }else{
-           return $(this[0].children)
-        }
-        
-    },
-    // 获取祖先元素
-    parents(ele){
-       let parentsAry = [],
-           currentEle = this[0],
-           _that = this;
-        
-       function eachParent(element){
-           var parentEle = element.parentElement
-           if(ele){
-                if(parentEle&&parentEle.nodeType === 1){ // 是节点
-                     // 判断是否是id或class 还是 tag
-                     var  flag = _that._isIdOrClassOrTag(ele)
-                     if(flag === 1){ // id
-                         if(_that._isIncludeId(parentEle,ele)){
-                            parentsAry.push(parentEle)
-                         }    
-                     }
-                     if(flag === 2){ // class
-                         if(_that._isIncludeClass(parentEle,ele)){
-                            parentsAry.push(parentEle)
-                         }
-                         eachParent(parentEle)
-                     }
-                     if(flag === 3){  //tag
-                         if(parentEle.localName === ele.trim()){
-                           parentsAry.push(parentEle)
-                         }
-                         eachParent(parentEle)
-                     }
-                }
-           }else{
-                if(parentEle&&parentEle.nodeType === 1){ // 是节点
-                    parentsAry.push(parentEle)
-                    eachParent(parentEle)
-                }
-           }
-       }
-       eachParent(currentEle);
-       
-
-       return $(parentsAry)
-    //    let len=parentsAry.length;
-    //    for(var i = 0;i<len;i++){
-    //        this[i] = parentsAry[i]
-    //    }
-    //    this.length = len;
-    //    if(len) return this;
-
-    },
-    // 获取父元素
-    parent(){
-       if(this[0]){
-          return $(this[0].parentNode)
-       }
     },
     // 获取同胞元素
     siblings(ele){
        let siblingsAry = []
        let currentEle = this[0];
        let _that = this
+
 
        // 遍历上级
        function siblingPrev(curEle){
@@ -460,7 +303,6 @@ Dom.prototype = {
                 findAry.push(eleList[i])
              }
         });
-
         return $(findAry)
     }
 }
@@ -533,10 +375,10 @@ Dom.fn.extends({
 
     // 判断是包含class
     _isIncludeClass(ele,value){
-        let classList = ele.jqDom?ele[0].classList:ele.classList
+        let className  = ele.jqDom?ele[0].className :ele.className 
+        let classList = className.trim().split(" ");
         let newValue = value.trim().replace(/^\./,"")
         let result = false;
-
         for(var i = 0, len=classList.length;i<len;i++){
             if(classList[i] === newValue){
                 result = true;
@@ -546,22 +388,7 @@ Dom.fn.extends({
 
         return result;
     },
-    // 判断是否包含id
-    _isIncludeId(ele,value){
-        var result = false;
-        var idStr = ele.jqDom?ele.attr("id"):$(ele).attr("id")
-        var newValue = value.trim().replace(/^#/,"")
-        var idAry = idStr.trim().split(/\s+/ig)
-
-        for(var i = 0,len=idAry.length;i<len;i++){
-            if(idAry[i] === newValue){
-                result = true;
-                break;
-            } 
-        }
-
-        return result;
-    },
+  
     // 判断是Id 1  还是class 2  否则是tag 3
     _isIdOrClassOrTag(nameStr){
         var result = 3;
@@ -576,27 +403,6 @@ Dom.fn.extends({
 
         return result;
     },
-    _returnThis(ele){
-        if(!ele || ele.length == 0){
-            delete this[0]
-            this.length = 0;
-        }
-
-        if(Array.isArray(ele)&&ele.length>1){
-            let len = ele.length
-            for(let i = 0; i<len; i++){
-                this[i] = ele[i]
-            }
-            this.length = len
-        }
-
-        if(ele&&ele.length == 1){
-           this[0] = ele;
-           this.length = 1;
-        }
-
-        return this
-    }
    
 })
 
