@@ -1,8 +1,9 @@
 import Calendar from './calendar.js';
 
 
-window.Calendar = Calendar;
-
-if (typeof module === "object" && typeof module.exports === "object"){
-    module.exports = Calendar
+if(window){
+    window.Calendar = Calendar;
 }
+
+export default Calendar
+

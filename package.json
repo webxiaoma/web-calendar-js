@@ -3,6 +3,11 @@
   "version": "1.1.0",
   "description": "A calendar plug-in",
   "main": "src/index.js",
+  "style": "lib/static/css/calendar.min.css",
+  "files": [
+    "lib",
+    "src"
+  ],
   "keywords": "calendar,calendar-js,web-calendar-js,calendarJs,webCalendarJs",
   "scripts": {
     "dev": "npx cross-env NODE_ENV=development webpack-dev-server --inline --progress  --config build/webpack.dev.js",
