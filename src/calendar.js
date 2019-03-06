@@ -741,4 +741,4 @@ Calendar.prototype.addEventInput = function(){
     
 }
 
-module.exports = Calendar
+export default Calendar
