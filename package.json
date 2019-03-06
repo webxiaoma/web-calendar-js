@@ -1,8 +1,8 @@
 {
   "name": "web-calendar-js",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A calendar plug-in",
-  "main": "index.js",
+  "main": "src/index.js",
   "keywords": "calendar,calendar-js,web-calendar-js,calendarJs,webCalendarJs",
   "scripts": {
     "dev": "npx cross-env NODE_ENV=development webpack-dev-server --inline --progress  --config build/webpack.dev.js",
